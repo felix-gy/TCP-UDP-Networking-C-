@@ -109,29 +109,15 @@ struct saveTime
             return "Round trip time not available (no receive time)";
         }
     }
-    // Member function to print send and receive times
-    void printTimes() const
+
+    string getLogEntry() const
     {
-        auto printTimePoint = [](const chrono::system_clock::time_point &tp)
-        {
-            auto in_time_t = chrono::system_clock::to_time_t(tp);
-            auto ms = chrono::duration_cast<chrono::milliseconds>(tp.time_since_epoch()) % 1000;
-
-            cout << put_time(localtime(&in_time_t), "%Y-%m-%d %H:%M:%S")
-                 << '.' << setfill('0') << setw(3) << ms.count();
-        };
-
-        cout << "ID: " << id << endl;
-        cout << "Send time: ";
-        printTimePoint(send_time);
-        cout << endl;
-
-        cout << "Receive time: ";
-        printTimePoint(receive_time);
-        cout << endl;
-
-        auto diff = receive_time - send_time;
-        cout << "Round trip time: " << chrono::duration<double, milli>(diff).count() << " ms" << endl;
+        ostringstream oss;
+        oss << "ID: " << id << "\n";
+        oss << "Send time: " << getSendTime() << "\n";
+        oss << "Receive time: " << getReceiveTime() << "\n";
+        oss << "Round trip time: " << getRoundTripTime() << "\n";
+        return oss.str();
     }
 };
 
@@ -139,30 +125,17 @@ map<int, saveTime> time_map;
 
 void savMapTime(string filename)
 {
-    // Open a file to redirect output
     string output_filename = filename + "_output.txt";
     ofstream outputFile(output_filename);
     if (!outputFile) {
         cerr << "Error opening file for writing" << std::endl;
         return;
     }
-
-    // Redirect std::cout to outputFile
-    streambuf* oldCoutBuffer = std::cout.rdbuf();
-    cout.rdbuf(outputFile.rdbuf());
-
-    // Now everything written to std::cout goes to output.txt
     
     for (const auto &it : time_map)
     {
-        cout << it.first << endl;
-        it.second.printTimes();
+        outputFile << it.second.getLogEntry();
     }
-
-    // Restore std::cout to its original state
-    std::cout.rdbuf(oldCoutBuffer);
-
-    // Close the file
     outputFile.close();
 }
 
@@ -288,6 +261,7 @@ int main()
         if (sendFile(filename, main_client))
         {
             flag = false;
+            cout << "Archivo enviado" << endl;
             cout << "Coloque - Enter o otro - para cerrra el programa y crear un txt con los tiempos de cada paquete asta este momento " << endl;
             cin >> c;
             savMapTime(filename);

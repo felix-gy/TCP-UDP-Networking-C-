@@ -1,0 +1,20 @@
+1
+ID: 1
+Send time: 2024-11-12 12:04:42.253
+Receive time: 2024-11-12 12:04:42.253
+Round trip time: 0.290564 ms
+2
+ID: 2
+Send time: 2024-11-12 12:04:42.253
+Receive time: 2024-11-12 12:04:42.253
+Round trip time: 0.19459 ms
+3
+ID: 3
+Send time: 2024-11-12 12:04:42.253
+Receive time: 2024-11-12 12:04:42.253
+Round trip time: 0.177309 ms
+4
+ID: 4
+Send time: 2024-11-12 12:04:42.253
+Receive time: 2024-11-12 12:04:42.253
+Round trip time: 0.180186 ms
